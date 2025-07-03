@@ -1,0 +1,26 @@
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: DBTestLogicStudio
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Test.123456
+    ports:
+      - "1433:1433"
+
+  dbinit:
+    image: mcr.microsoft.com/mssql-tools
+    depends_on:
+      - sqlserver
+    volumes:
+      - ./DBTestLogicStudio/init.sql:/scripts/init.sql:ro
+    entrypoint:
+      - /bin/bash
+      - -c
+      - |
+        sleep 5
+        /opt/mssql-tools/bin/sqlcmd \
+          -S sqlserver \
+          -U SA \
+          -P "Test.123456" \
+          -i /scripts/init.sql
