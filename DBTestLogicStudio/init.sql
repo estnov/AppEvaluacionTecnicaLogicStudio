@@ -1,9 +1,21 @@
--- 1 Crear la base de datos
+-- 1 Crear la base de datos y usuario
 CREATE DATABASE DBTestLogicStudio;
 
 GO
 
 USE DBTestLogicStudio;
+
+GO
+
+CREATE LOGIN UserTest WITH 
+        PASSWORD = 'Test.123456',
+        DEFAULT_DATABASE = DBTestLogicStudio,
+        CHECK_EXPIRATION = OFF,
+        CHECK_POLICY = OFF;
+
+GO
+
+CREATE USER UserTest FOR LOGIN UserTest WITH DEFAULT_SCHEMA = dbo;
 
 GO
 
@@ -16,6 +28,12 @@ GO
 CREATE SCHEMA Cajas;
 
 GO
+
+GRANT CONTROL ON SCHEMA::Cajas      TO UserTest;
+GRANT CONTROL ON SCHEMA::Productos  TO UserTest;
+
+GO
+
 
 -- 3 Crear tablas
 
@@ -101,5 +119,5 @@ GO
 
 INSERT INTO Productos.Categoria (Descripcion, Activo)
     VALUES ('LIMPIEZA',1)
-    
+
 GO

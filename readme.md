@@ -17,7 +17,7 @@ Todo el proyecto se arranca desde docker para facilidad de la prueba y su evalua
     Parámetros de conexión:
 
     - Host: localhost, Puerto: 1433
-    - User: SA
+    - User: UserTest
     - Password: Test.123456
 
     La base se ha inicializado con 3 categorias de productos:
