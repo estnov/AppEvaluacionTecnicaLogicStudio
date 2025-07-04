@@ -1,0 +1,6 @@
+@BackTransaccionesLogicStudio_HostAddress = http://localhost:5293
+
+GET {{BackTransaccionesLogicStudio_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

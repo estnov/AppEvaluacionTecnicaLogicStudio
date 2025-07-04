@@ -68,6 +68,7 @@ namespace BackTestLogicStudio.Services
             List<CategoryDto> categories = new List<CategoryDto>();
 
             categories = await _ctx.Categoria
+                                .Where(c => c.Activo)
                                 .OrderBy (c => c.Id)
                                 .Select(c => new CategoryDto
                                 {
