@@ -1,4 +1,5 @@
 services:
+# --- SQL Server ---------------------------------------------------------
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2019-latest
     container_name: DBTestLogicStudio
@@ -24,3 +25,18 @@ services:
           -U SA \
           -P "Test.123456" \
           -i /scripts/init.sql
+
+# --- Backend Productos .NET 8 -----------------------------------------------------
+  backend:
+    build:
+      context: ./BackTestLogicStudio
+      dockerfile: Dockerfile
+    container_name: ApiLogicStudio1
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=DBTestLogicStudio;User Id=SA;Password=Test.123456;TrustServerCertificate=True;Encrypt=False
+    depends_on:
+      dbinit:
+        condition: service_completed_successfully
