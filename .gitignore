@@ -55,3 +55,8 @@ nunit-*.xml
 
 #VS
 .vs/
+
+#Angular
+.angular/
+.vscode/
+node_modules/

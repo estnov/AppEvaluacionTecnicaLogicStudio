@@ -59,3 +59,23 @@ services:
         condition: service_completed_successfully
   
   
+
+# --- Frontend Angular -----------------------------------------------------
+  frontend:
+    build:
+      context: ./FrontTestLogicStudio
+      dockerfile: Dockerfile
+    container_name: WebLogicStudio
+    ports:
+      - "4200:80"           
+    environment:
+      - VITE_API_PRODUCTS=http://backend:8080
+      - VITE_API_TRANSACTIONS=http://transactions:8081
+    depends_on:
+      - backend
+      - transactions
+    networks: [logicnet]
+
+networks:
+  logicnet:
+    driver: bridge

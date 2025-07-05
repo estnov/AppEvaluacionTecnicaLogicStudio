@@ -9,6 +9,13 @@ var productsApiBaseUrl = builder.Configuration["Services:ProductsApi:BaseUrl"]
                        ?? throw new InvalidOperationException(
                               "ProductsApi url no está configurado");
 
+// CORS
+builder.Services.AddCors(p =>
+    p.AddPolicy("AllowAll", policy =>
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod()));
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -24,17 +31,18 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+app.UseRouting();
+app.UseCors("AllowAll");
+
+app.UseAuthorization();
+
+app.MapControllers();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
 
 app.Run();

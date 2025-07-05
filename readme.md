@@ -43,4 +43,4 @@ En cumplimiento con el ejercicio propuesto se han creado los siguientes endpoint
     - GET	 /api/Transactions/GetTransactionList	Devuelve todas las transacciones con sus detalles.
     - GET	 /api/Transactions/GetTransactionTypes	Lista los tipos de transacción (p. ej. Venta = 1).
 
-Cada esquema tiene Swagger para su consulta (/swagger)
+Cada esquema tiene Swagger para su consulta (/swagger/index.html)
