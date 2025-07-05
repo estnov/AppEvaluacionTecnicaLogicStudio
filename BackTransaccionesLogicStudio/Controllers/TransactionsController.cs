@@ -45,5 +45,21 @@ namespace BackTransaccionesLogicStudio.Controllers
 
             return transactionsTypes.Count() > 0 ? Ok(transactionsTypes) : NoContent();
         }
+
+        [HttpPut("UpdateTransaction/{id:int}")]
+        public async Task<ActionResult<TransaccionDto>> UpdateTransaction(int id, TransaccionDto dto)
+        {
+            var updated = await _transactionService.Update(id, dto);
+
+            return updated is null ? NotFound() : Ok(updated);
+        }
+
+        [HttpGet("GetTransaction/{id:int}")]
+        public async Task<ActionResult<TransaccionDto>> GetById(int id)
+        {
+            var transaccion = await _transactionService.GetTransaccion(id);
+
+            return transaccion is null ? NotFound() : Ok(transaccion);
+        }
     }
 }
