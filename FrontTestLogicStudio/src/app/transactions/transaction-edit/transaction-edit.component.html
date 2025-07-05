@@ -13,7 +13,7 @@
   </nz-form-control>
 </nz-form-item>
 
-<nz-table #nzTable [nzData]="rows"  nzTableLayout="fixed" [nzPageSize]="5">
+<nz-table [nzData]="rows" nzTableLayout="fixed">
   <thead>
     <tr>
       <th nzWidth="40px"></th>
@@ -65,5 +65,5 @@
   nzType="primary"
   style="margin-top:16px;"
   (click)="save()">
-  Registrar transacción
+  Actualizar transacción
 </button>

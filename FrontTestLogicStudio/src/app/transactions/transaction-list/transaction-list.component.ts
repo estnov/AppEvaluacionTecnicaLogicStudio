@@ -16,6 +16,8 @@ import { TransactionService } from '../../services/transaction.service';
 import { forkJoin } from 'rxjs';
 import { NzSelectModule } from 'ng-zorro-antd/select'; 
 import { CommonModule } from '@angular/common';
+import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
+import { TransactionEditComponent } from '../transaction-edit/transaction-edit.component';
 
 @Component({
   selector: 'app-transaction-list',
@@ -27,7 +29,8 @@ import { CommonModule } from '@angular/common';
     NzDropDownModule,
     NzButtonModule,
     NzSelectModule,
-    CommonModule 
+    CommonModule ,
+    NzModalModule 
    ],
   templateUrl: './transaction-list.component.html',
   styleUrl: './transaction-list.component.scss'
@@ -42,7 +45,10 @@ export class TransactionListComponent {
   listOfTypes: TransactionTypeDto[] = [];  
   typeMap: Record<number, string> = {};
 
-  constructor(private txService: TransactionService) {}
+  constructor(
+    private txService: TransactionService,
+    private modal: NzModalService
+  ) {}
 
 
   ngOnInit(): void {
@@ -72,5 +78,20 @@ export class TransactionListComponent {
         : this.listOfData.filter(
             tx => tx.idTipoTransaccion === this.selectedTypeId
           );
+  }
+
+  openEdit(id: number): void {
+    this.modal.create({
+      nzTitle  : `Editar transacción #${id}`,
+      nzWidth  : '800px',
+      nzContent: TransactionEditComponent,
+      nzData: id, 
+      nzFooter : null
+    }).afterClose.subscribe(ref => {
+      if (ref) { 
+        this.txService.getTransactionList$()
+          .subscribe(list => this.listOfData = this.listOfDisplayData = list);
+      }
+    });
   }
 }

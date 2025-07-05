@@ -1,4 +1,4 @@
-<nz-table #nzTable [nzData]="listOfDisplayData" nzTableLayout="fixed">
+<nz-table #nzTable [nzData]="listOfDisplayData" nzTableLayout="fixed" [nzPageSize]="5">
   <thead>
     <tr>
       <th nzWidth="60px">Id</th>
@@ -24,6 +24,7 @@
   <tbody>
     @for (row of nzTable.data; track row) {
       <tr>
+        <td>{{ row.id }}</td>
         <td (dblclick)="startEdit(row,'nombre')">
         <ng-container *ngIf="editingKey === keyOf(row,'nombre'); else showNombre">
             <input

@@ -1,4 +1,4 @@
-<nz-table #nzTable [nzData]="listOfDisplayData" nzTableLayout="fixed">
+<nz-table #nzTable [nzData]="listOfDisplayData" nzTableLayout="fixed" [nzPageSize]="5">
   <thead>
     <tr>
       <!-- Columna ID -->
@@ -22,7 +22,7 @@
 
   <tbody>
     @for (tx of nzTable.data; track tx) {
-      <tr>
+      <tr (dblclick)="openEdit(tx.id)">
         <td>{{ tx.id }}</td>
         <td>{{ typeMap[tx.idTipoTransaccion] ?? '—' }}</td>
         <td>{{ tx.fecha }}</td>

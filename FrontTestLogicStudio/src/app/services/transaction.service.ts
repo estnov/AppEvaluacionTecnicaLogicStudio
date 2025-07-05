@@ -42,4 +42,12 @@ export class TransactionService {
       payload
     );
   }
+
+  getTransaction$(id: number): Observable<TransaccionDto> {
+    return this.http.get<TransaccionDto>(`${this.baseUrl}/GetTransaction/${id}`);
+  }
+
+  updateTransaction$(id: number, payload: TransaccionDto): Observable<void> {
+    return this.http.put<void>(`${this.baseUrl}/UpdateTransaction/${id}`, payload);
+  }
 }
