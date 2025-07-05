@@ -1,0 +1,63 @@
+<nz-table #nzTable [nzData]="listOfDisplayData" nzTableLayout="fixed" [nzPageSize]="5">
+  <thead>
+    <tr>
+      <!-- Columna ID -->
+      <th nzWidth="80px">Id</th>
+
+      <!-- Columna con filtro -->
+      <th nzCustomFilter>
+        Tipo 
+        <nz-filter-trigger
+          [(nzVisible)]="visible"
+          [nzActive]="selectedTypeId !== null"
+          [nzDropdownMenu]="menu">
+          <nz-icon nzType="filter" />
+        </nz-filter-trigger>
+      </th>
+
+      <th nzWidth="180px">Fecha</th>
+      <th nzRight>Total</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    @for (tx of nzTable.data; track tx) {
+      <tr (dblclick)="openEdit(tx.id)">
+        <td>{{ tx.id }}</td>
+        <td>{{ typeMap[tx.idTipoTransaccion] ?? '—' }}</td>
+        <td>{{ tx.fecha }}</td>
+        <td nzRight>{{ tx.total }}</td>
+      </tr>
+    }
+  </tbody>
+</nz-table>
+
+<!-- Panel del filtro -->
+<nz-dropdown-menu #menu="nzDropdownMenu">
+  <div class="ant-table-filter-dropdown">
+    <div class="search-box">
+      <nz-select
+        [(ngModel)]="selectedTypeId"
+        nzShowSearch
+        nzAllowClear
+        nzPlaceHolder="Seleccionar tipo"
+        style="width: 200px">
+        <nz-option
+          *ngFor="let t of listOfTypes"
+          [nzValue]="t.id"
+          [nzLabel]="t.nombre">
+        </nz-option>
+      </nz-select>
+
+      <button
+        nz-button
+        nzSize="small"
+        nzType="primary"
+        (click)="search()"
+        class="search-button">
+        Filtrar
+      </button>
+      <button nz-button nzSize="small" (click)="reset()">Reset</button>
+    </div>
+  </div>
+</nz-dropdown-menu>

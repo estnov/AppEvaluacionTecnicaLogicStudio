@@ -1,0 +1,15 @@
+:host {
+  display: block;
+  padding: 1rem;
+}
+
+.search-box {
+  padding: 8px;
+
+  input { width: 188px; margin-bottom: 8px; display: block; }
+  button { width: 90px; }
+  .search-button { margin-right: 8px; }
+}
+
+tr td { cursor: default; }
+tr td[dblclick] { cursor: pointer; }

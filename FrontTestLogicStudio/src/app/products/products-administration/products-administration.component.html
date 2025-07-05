@@ -1,0 +1,119 @@
+<nz-table #nzTable [nzData]="listOfDisplayData" nzTableLayout="fixed" [nzPageSize]="5">
+  <thead>
+    <tr>
+      <th nzWidth="60px">Id</th>
+
+      <th nzCustomFilter>
+        Nombre
+        <nz-filter-trigger
+          [(nzVisible)]="visible"
+          [nzActive]="searchValue.length > 0"
+          [nzDropdownMenu]="menu">
+          <nz-icon nzType="search" />
+        </nz-filter-trigger>
+      </th>
+
+      <th>Descripción</th>
+      <th nzRight>Precio</th>
+      <th nzRight>Stock</th>
+      <th>Categoría</th>
+      <th nzWidth="60px"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    @for (row of nzTable.data; track row) {
+      <tr>
+        <td>{{ row.id }}</td>
+        <td (dblclick)="startEdit(row,'nombre')">
+        <ng-container *ngIf="editingKey === keyOf(row,'nombre'); else showNombre">
+            <input
+            nz-input
+            [(ngModel)]="editValue"
+            (blur)="saveEdit(row,'nombre')" />
+        </ng-container>
+        <ng-template #showNombre>{{ row.nombre }}</ng-template>
+        </td>
+
+        <td (dblclick)="startEdit(row,'descripcion')">
+        <ng-container *ngIf="editingKey === keyOf(row,'descripcion'); else showDesc">
+            <input
+            nz-input
+            [(ngModel)]="editValue"
+            (blur)="saveEdit(row,'descripcion')" />
+        </ng-container>
+        <ng-template #showDesc>{{ row.descripcion }}</ng-template>
+        </td>
+
+        <td nzRight (dblclick)="startEdit(row,'precio')">
+        <ng-container *ngIf="editingKey === keyOf(row,'precio'); else showPrecio">
+            <input
+            nz-input
+            type="number"
+            [(ngModel)]="editValue"
+            (blur)="saveEdit(row,'precio')" />
+        </ng-container>
+        <ng-template #showPrecio>{{ row.precio | number:'1.2-2' }}</ng-template>
+        </td>
+
+        <td nzRight (dblclick)="startEdit(row,'stock')">
+        <ng-container *ngIf="editingKey === keyOf(row,'stock'); else showStock">
+            <input
+            nz-input
+            type="number"
+            [(ngModel)]="editValue"
+            (blur)="saveEdit(row,'stock')" />
+        </ng-container>
+        <ng-template #showStock>{{ row.stock }}</ng-template>
+        </td>
+
+        <td>{{ row.categoria }}</td>
+
+        <td>
+          <span
+            nz-popconfirm
+            nzPopconfirmTitle="¿Eliminar?"
+            (nzOnConfirm)="delete(row)">
+            <span
+              nz-icon
+              nzType="delete"
+              nzTheme="outline"
+              style="cursor:pointer;color:crimson">
+            </span>
+          </span>
+        </td>
+      </tr>
+
+      <ng-template #editTpl>
+        <input nz-input [(ngModel)]="editValue"
+               (blur)="saveEdit(row,'nombre')" />
+      </ng-template>
+      <ng-template #showTpl>{{ row.nombre }}</ng-template>
+
+      <ng-template #editTplDesc>
+        <input nz-input [(ngModel)]="editValue"
+               (blur)="saveEdit(row,'descripcion')" />
+      </ng-template>
+      <ng-template #showTplDesc>{{ row.descripcion }}</ng-template>
+
+      <ng-template #editTplNum>
+        <input nz-input type="number" [(ngModel)]="editValue"
+               (blur)="saveEdit(row,'precio')" />
+      </ng-template>
+      <ng-template #showTplNum>{{ row.precio | number:'1.2-2' }}</ng-template>
+
+      <ng-template #showTplNumStock>{{ row.stock }}</ng-template>
+    }
+  </tbody>
+</nz-table>
+
+<nz-dropdown-menu #menu="nzDropdownMenu">
+  <div class="ant-table-filter-dropdown">
+    <div class="search-box">
+      <input nz-input placeholder="Buscar nombre" [(ngModel)]="searchValue" />
+      <button nz-button nzSize="small" nzType="primary"
+              (click)="search()" class="search-button">Buscar</button>
+      <button nz-button nzSize="small" (click)="reset()">Reset</button>
+    </div>
+  </div>
+</nz-dropdown-menu>

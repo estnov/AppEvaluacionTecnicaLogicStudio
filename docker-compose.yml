@@ -1,0 +1,81 @@
+services:
+# --- SQL Server ---------------------------------------------------------
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: DBTestLogicStudio
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Test.123456
+    ports:
+      - "1433:1433"
+
+  dbinit:
+    image: mcr.microsoft.com/mssql-tools
+    depends_on:
+      - sqlserver
+    volumes:
+      - ./DBTestLogicStudio/init.sql:/scripts/init.sql:ro
+    entrypoint:
+      - /bin/bash
+      - -c
+      - |
+        sleep 5
+        /opt/mssql-tools/bin/sqlcmd \
+          -S sqlserver \
+          -U SA \
+          -P "Test.123456" \
+          -i /scripts/init.sql
+
+# --- Backend Productos .NET 8 -----------------------------------------------------
+  backend:
+    build:
+      context: ./BackTestLogicStudio
+      dockerfile: Dockerfile
+    container_name: ApiLogicStudio1
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=DBTestLogicStudio;User Id=SA;Password=Test.123456;TrustServerCertificate=True;Encrypt=False
+    depends_on:
+      dbinit:
+        condition: service_completed_successfully
+  
+
+# --- Backend Transacciones .NET 8 -----------------------------------------------------
+  transactions:
+    build:
+      context: ./BackTransaccionesLogicStudio  
+      dockerfile: Dockerfile
+    container_name: ApiLogicStudio2
+    ports:
+      - "8081:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=DBTestLogicStudio;User Id=SA;Password=Test.123456;TrustServerCertificate=True;Encrypt=False
+      - Services__ProductsApi__BaseUrl=http://backend:8080
+    depends_on:
+      dbinit:
+        condition: service_completed_successfully
+  
+  
+
+# --- Frontend Angular -----------------------------------------------------
+  frontend:
+    build:
+      context: ./FrontTestLogicStudio
+      dockerfile: Dockerfile
+    container_name: WebLogicStudio
+    ports:
+      - "4200:80"           
+    environment:
+      - VITE_API_PRODUCTS=http://backend:8080
+      - VITE_API_TRANSACTIONS=http://transactions:8081
+    depends_on:
+      - backend
+      - transactions
+    networks: [logicnet]
+
+networks:
+  logicnet:
+    driver: bridge

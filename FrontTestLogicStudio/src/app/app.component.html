@@ -1,0 +1,52 @@
+<nz-layout class="app-layout">
+  <nz-sider class="menu-sidebar"
+    nzCollapsible
+    nzWidth="256px"
+    nzBreakpoint="md"
+    [(nzCollapsed)]="isCollapsed"
+    [nzTrigger]="null"
+  >
+    <div class="sidebar-logo">
+      <a href="https://github.com/estnov/AppEvaluacionTecnicaLogicStudio" target="_blank">
+        <img src="https://img.icons8.com/ios11/512/FFFFFF/github.png" alt="logo">
+        <h1>Front Test</h1>
+      </a>
+    </div>
+    <ul nz-menu nzTheme="dark" nzMode="inline" [nzInlineCollapsed]="isCollapsed">
+      <li nz-submenu nzOpen nzTitle="Transacción" nzIcon="transaction">
+        <ul>
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/transaction-list">Listar Transacciones</a>
+          </li>
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/transaction">Nueva Transacción</a>
+          </li>
+        </ul>
+      </li>
+      <li nz-submenu nzOpen nzTitle="Productos" nzIcon="form">
+        <ul>
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/product-administration">Administrar Productos</a>
+          </li>
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/product">Crear Productos</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </nz-sider>
+  <nz-layout>
+    <nz-header>
+      <div class="app-header">
+        <span class="header-trigger" (click)="isCollapsed = !isCollapsed">
+          <nz-icon class="trigger" [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'" />
+        </span>
+      </div>
+    </nz-header>
+    <nz-content>
+      <div class="inner-content">
+        <router-outlet></router-outlet>
+      </div>
+    </nz-content>
+  </nz-layout>
+</nz-layout>
